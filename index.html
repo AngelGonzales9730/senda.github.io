@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Senda - Tu taxi y mototaxi en Chincha. Servicio de transporte seguro, rápido y confiable con seguimiento en tiempo real." />
+  <meta name="keywords" content="taxi chincha, mototaxi chincha, transporte chincha, senda app, taxi ica" />
+  <title>Senda – Transporte en Chincha</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --dark:    #0F2D3A;
+      --amber:   #D49250;
+      --cream:   #F5EFE2;
+      --white:   #FFFFFF;
+      --gray:    #6B7280;
+      --light:   #F9F6F0;
+      --border:  #E5DDD0;
+      --error:   #DC2626;
+      --success: #16A34A;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--white); color: var(--dark); line-height: 1.6; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--dark);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 40px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    }
+    .nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-logo  { width: 38px; height: 38px; border-radius: 10px; object-fit: cover; }
+    .nav-name  { font-size: 22px; font-weight: 800; color: var(--cream); letter-spacing: -0.5px; }
+    .nav-links { display: flex; gap: 24px; list-style: none; }
+    .nav-links a { color: rgba(245,239,226,0.7); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--amber); }
+    .nav-cta { background: var(--amber); color: var(--white); padding: 9px 20px; border-radius: 8px; font-weight: 700; font-size: 14px; text-decoration: none; transition: opacity 0.2s; }
+    .nav-cta:hover { opacity: 0.88; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--dark) 0%, #1a3f52 100%);
+      padding: 100px 40px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -80px; right: -80px;
+      width: 320px; height: 320px; border-radius: 50%;
+      background: rgba(212,146,80,0.08);
+    }
+    .hero-logo { width: 90px; height: 90px; border-radius: 22px; object-fit: cover; margin-bottom: 28px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+    .hero h1 { font-size: 48px; font-weight: 900; color: var(--cream); line-height: 1.15; letter-spacing: -1px; margin-bottom: 16px; }
+    .hero h1 span { color: var(--amber); }
+    .hero p  { font-size: 18px; color: rgba(245,239,226,0.7); max-width: 520px; margin: 0 auto 36px; }
+    .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: var(--amber); color: var(--white); padding: 15px 32px; border-radius: 12px; font-weight: 800; font-size: 16px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: transform 0.15s, opacity 0.15s; }
+    .btn-primary:hover { transform: translateY(-2px); opacity: 0.92; }
+    .btn-secondary { background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.2); color: var(--cream); padding: 15px 32px; border-radius: 12px; font-weight: 700; font-size: 16px; text-decoration: none; transition: background 0.2s; }
+    .btn-secondary:hover { background: rgba(255,255,255,0.14); }
+    .badge-prox { display: inline-block; background: rgba(212,146,80,0.15); border: 1px solid rgba(212,146,80,0.4); color: var(--amber); padding: 6px 14px; border-radius: 99px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; margin-top: 20px; }
+
+    /* ── SECCIONES ── */
+    section { padding: 80px 40px; }
+    section:nth-child(even) { background: var(--light); }
+    .section-label { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--amber); margin-bottom: 10px; }
+    .section-title { font-size: 34px; font-weight: 900; color: var(--dark); letter-spacing: -0.5px; margin-bottom: 12px; }
+    .section-sub   { font-size: 16px; color: var(--gray); max-width: 540px; margin-bottom: 48px; }
+    .center { text-align: center; }
+    .center .section-sub { margin-left: auto; margin-right: auto; }
+
+    /* ── SERVICIOS ── */
+    .servicios-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 1100px; margin: 0 auto; }
+    .servicio-card {
+      background: var(--white); border-radius: 18px; padding: 32px 28px;
+      border: 1.5px solid var(--border);
+      box-shadow: 0 4px 20px rgba(15,45,58,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .servicio-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(15,45,58,0.12); }
+    .servicio-icon {
+      width: 60px; height: 60px; border-radius: 16px;
+      background: rgba(212,146,80,0.12);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+    }
+    .servicio-icon svg { width: 30px; height: 30px; }
+    .servicio-nombre { font-size: 18px; font-weight: 800; color: var(--dark); margin-bottom: 8px; }
+    .servicio-desc   { font-size: 14px; color: var(--gray); line-height: 1.6; margin-bottom: 16px; }
+    .servicio-precio { display: inline-block; background: rgba(212,146,80,0.12); color: #B8743A; font-size: 15px; font-weight: 800; padding: 6px 14px; border-radius: 8px; }
+
+    /* ── COMO FUNCIONA ── */
+    .pasos { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 32px; max-width: 900px; margin: 0 auto; }
+    .paso { text-align: center; }
+    .paso-num { width: 52px; height: 52px; border-radius: 50%; background: var(--amber); color: var(--white); font-size: 22px; font-weight: 900; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; }
+    .paso h3 { font-size: 17px; font-weight: 800; color: var(--dark); margin-bottom: 8px; }
+    .paso p  { font-size: 14px; color: var(--gray); }
+
+    /* ── CONTACTO ── */
+    .contacto-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; max-width: 900px; margin: 0 auto; }
+    .contacto-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 16px; padding: 28px 24px; display: flex; align-items: flex-start; gap: 16px; }
+    .contacto-icon { width: 46px; height: 46px; border-radius: 12px; background: rgba(212,146,80,0.12); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .contacto-icon svg { width: 22px; height: 22px; }
+    .contacto-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--amber); margin-bottom: 4px; }
+    .contacto-val { font-size: 15px; font-weight: 600; color: var(--dark); }
+    .contacto-val a { color: var(--dark); text-decoration: none; }
+    .contacto-val a:hover { color: var(--amber); }
+
+    /* ── TERMINOS ── */
+    .legal-box { max-width: 820px; margin: 0 auto; }
+    .legal-box h3 { font-size: 18px; font-weight: 800; color: var(--dark); margin: 28px 0 10px; }
+    .legal-box h3:first-child { margin-top: 0; }
+    .legal-box p, .legal-box li { font-size: 14px; color: var(--gray); line-height: 1.8; margin-bottom: 8px; }
+    .legal-box ul { padding-left: 20px; margin-bottom: 12px; }
+    .legal-box li { margin-bottom: 4px; }
+    .legal-updated { font-size: 12px; color: var(--gray); margin-bottom: 24px; }
+
+    /* ── LIBRO DE RECLAMACIONES ── */
+    #libro-reclamaciones { background: var(--light); }
+    .libro-box { max-width: 720px; margin: 0 auto; }
+    .libro-header {
+      background: var(--dark); color: var(--cream);
+      border-radius: 14px 14px 0 0; padding: 24px 28px;
+      text-align: center;
+    }
+    .libro-header h2 { font-size: 20px; font-weight: 900; letter-spacing: 1px; margin-bottom: 6px; }
+    .libro-header p  { font-size: 12px; color: rgba(245,239,226,0.6); }
+    .libro-form-wrap {
+      background: var(--white); border: 1.5px solid var(--border);
+      border-top: none; border-radius: 0 0 14px 14px; padding: 32px 28px;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .form-row.full { grid-template-columns: 1fr; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .form-group label { font-size: 12px; font-weight: 700; color: var(--dark); letter-spacing: 0.3px; }
+    .form-group label span { color: var(--error); }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 11px 14px; font-size: 14px; color: var(--dark);
+      font-family: inherit; transition: border-color 0.2s;
+      background: var(--white);
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { outline: none; border-color: var(--amber); }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    .codigo-box { background: var(--light); border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+    .codigo-box .codigo-label { font-size: 11px; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 0.5px; }
+    .codigo-box .codigo-val { font-size: 16px; font-weight: 900; color: var(--dark); font-family: monospace; }
+    .btn-enviar {
+      width: 100%; padding: 15px; background: var(--dark); color: var(--white);
+      border: none; border-radius: 12px; font-size: 16px; font-weight: 800;
+      cursor: pointer; transition: background 0.2s; margin-top: 8px;
+    }
+    .btn-enviar:hover { background: #1a3f52; }
+    .btn-enviar:disabled { opacity: 0.5; cursor: not-allowed; }
+    .form-nota { font-size: 12px; color: var(--gray); text-align: center; margin-top: 14px; line-height: 1.6; }
+    .form-success { display: none; background: #F0FDF4; border: 1.5px solid #86EFAC; border-radius: 12px; padding: 20px 24px; text-align: center; }
+    .form-success h3 { color: var(--success); font-size: 17px; margin-bottom: 6px; }
+    .form-success p  { font-size: 13px; color: #166534; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark); color: rgba(245,239,226,0.5);
+      text-align: center; padding: 36px 40px;
+      font-size: 13px; line-height: 1.8;
+    }
+    footer a { color: var(--amber); text-decoration: none; }
+    footer strong { color: var(--cream); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 12px 20px; }
+      .nav-links { display: none; }
+      .hero { padding: 70px 24px; }
+      .hero h1 { font-size: 34px; }
+      section { padding: 60px 24px; }
+      .form-row { grid-template-columns: 1fr; }
+      .libro-form-wrap { padding: 24px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav>
+  <a href="#inicio" class="nav-brand">
+    <img src="logo.png" alt="Senda" class="nav-logo" />
+    <span class="nav-name">Senda</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#como-funciona">Cómo funciona</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+    <li><a href="#terminos">Términos</a></li>
+    <li><a href="#libro-reclamaciones" class="nav-cta">Libro de Reclamaciones</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section id="inicio" class="hero">
+  <img src="logo.png" alt="Senda logo" class="hero-logo" />
+  <h1>Tu transporte en<br/><span>Chincha, más fácil</span></h1>
+  <p>Conectamos pasajeros con taxistas y mototaxistas de confianza. Seguimiento en tiempo real, pago flexible y viajes programados.</p>
+  <div class="hero-btns">
+    <span class="btn-primary" style="opacity:0.65; cursor:default; user-select:none;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 20.5v-17c0-.83 1-1.3 1.6-.75l14 8.5c.55.34.55 1.16 0 1.5l-14 8.5C4 21.8 3 21.33 3 20.5z"/></svg>
+      Próximamente en Google Play
+    </span>
+    <a href="#servicios" class="btn-secondary">Ver servicios</a>
+  </div>
+  <div><span class="badge-prox">DISPONIBLE EN CHINCHA, ICA</span></div>
+</section>
+
+<!-- ═══════════════ SERVICIOS ═══════════════ -->
+<section id="servicios">
+  <div class="center">
+    <div class="section-label">Nuestros servicios</div>
+    <h2 class="section-title">Todo lo que necesitas para moverte</h2>
+    <p class="section-sub">Elige el servicio que mejor se adapta a tu necesidad. Todos con seguimiento en tiempo real.</p>
+  </div>
+  <div class="servicios-grid">
+
+    <!-- Taxi -->
+    <div class="servicio-card">
+      <div class="servicio-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#D49250" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v5a2 2 0 01-2 2h-1"/>
+          <circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>
+          <path d="M3 9h18"/>
+        </svg>
+      </div>
+      <div class="servicio-nombre">Taxi en Chincha</div>
+      <div class="servicio-desc">Viaje en auto privado desde tu ubicación hasta tu destino. Conductor verificado, ruta optimizada y tarifa clara antes de iniciar.</div>
+      <span class="servicio-precio">Desde S/ 5.00</span>
+    </div>
+
+    <!-- Mototaxi -->
+    <div class="servicio-card">
+      <div class="servicio-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#D49250" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>
+          <path d="M5 17H3V7h5l3 5h7l2 5H5z"/>
+          <path d="M10 12V7"/>
+        </svg>
+      </div>
+      <div class="servicio-nombre">Mototaxi en Chincha</div>
+      <div class="servicio-desc">Movilízate rápido por las calles de Chincha con mototaxistas de confianza. Ideal para distancias cortas y horario de alta demanda.</div>
+      <span class="servicio-precio">Desde S/ 3.00</span>
+    </div>
+
+    <!-- Programado -->
+    <div class="servicio-card">
+      <div class="servicio-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#D49250" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/><circle cx="12" cy="16" r="2"/>
+        </svg>
+      </div>
+      <div class="servicio-nombre">Viaje Programado</div>
+      <div class="servicio-desc">Reserva tu taxi o mototaxi con anticipación. Programa tu viaje para la hora exacta que necesitas y olvídate de las esperas.</div>
+      <span class="servicio-precio">Desde S/ 8.00</span>
+    </div>
+
+    <!-- Seguimiento -->
+    <div class="servicio-card">
+      <div class="servicio-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#D49250" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 010 16c-2 0-8-8-8-8s6-8 8-8z"/>
+          <path d="M6 18l12 4"/>
+        </svg>
+      </div>
+      <div class="servicio-nombre">Seguimiento en Tiempo Real</div>
+      <div class="servicio-desc">Comparte el enlace de seguimiento de tu viaje con familiares. Ven en el mapa dónde está tu conductor en todo momento.</div>
+      <span class="servicio-precio">Incluido en todos los viajes</span>
+    </div>
+
+    <!-- Pagos -->
+    <div class="servicio-card">
+      <div class="servicio-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#D49250" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+          <line x1="6" y1="15" x2="10" y2="15"/>
+        </svg>
+      </div>
+      <div class="servicio-nombre">Pago Flexible</div>
+      <div class="servicio-desc">Paga como prefieras: efectivo, Yape o Plin. Elige tu medio de pago al solicitar el viaje, sin sorpresas ni costos adicionales.</div>
+      <span class="servicio-precio">Sin costo adicional</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════ COMO FUNCIONA ═══════════════ -->
+<section id="como-funciona" style="background: var(--light);">
+  <div class="center">
+    <div class="section-label">Proceso</div>
+    <h2 class="section-title">¿Cómo funciona Senda?</h2>
+    <p class="section-sub">En 3 simples pasos estarás en camino a tu destino.</p>
+  </div>
+  <div class="pasos">
+    <div class="paso">
+      <div class="paso-num">1</div>
+      <h3>Ingresa tu destino</h3>
+      <p>Abre la app, escribe a dónde vas y elige entre taxi o mototaxi según tu preferencia.</p>
+    </div>
+    <div class="paso">
+      <div class="paso-num">2</div>
+      <h3>Confirma tu viaje</h3>
+      <p>Ve el precio estimado, elige tu medio de pago y solicita el servicio. Un conductor cercano lo aceptará en segundos.</p>
+    </div>
+    <div class="paso">
+      <div class="paso-num">3</div>
+      <h3>Llega a tu destino</h3>
+      <p>Sigue en el mapa la llegada de tu conductor. Al terminar, paga como prefieras y califica el servicio.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CONTACTO ═══════════════ -->
+<section id="contacto">
+  <div class="center">
+    <div class="section-label">Contáctanos</div>
+    <h2 class="section-title">Estamos aquí para ayudarte</h2>
+    <p class="section-sub">Ante cualquier consulta o problema con el servicio, comunícate con nosotros.</p>
+  </div>
+  <div class="contacto-grid">
+    <div class="contacto-card">
+      <div class="contacto-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#D49250" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </div>
+      <div>
+        <div class="contacto-label">Teléfono</div>
+        <div class="contacto-val"><a href="tel:+51933567797">+51 933 567 797</a></div>
+      </div>
+    </div>
+    <div class="contacto-card">
+      <div class="contacto-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#D49250" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </div>
+      <div>
+        <div class="contacto-label">Correo electrónico</div>
+        <div class="contacto-val"><a href="mailto:angelgonzales9730@gmail.com">angelgonzales9730@gmail.com</a></div>
+      </div>
+    </div>
+    <div class="contacto-card">
+      <div class="contacto-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#D49250" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <div>
+        <div class="contacto-label">Dirección</div>
+        <div class="contacto-val">Chincha Alta, Ica, Perú</div>
+      </div>
+    </div>
+    <div class="contacto-card">
+      <div class="contacto-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#D49250" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div>
+        <div class="contacto-label">Horario de atención</div>
+        <div class="contacto-val">Lunes a Domingo<br/>6:00 am – 11:00 pm</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TÉRMINOS Y CONDICIONES ═══════════════ -->
+<section id="terminos" style="background: var(--light);">
+  <div class="section-label">Legal</div>
+  <h2 class="section-title">Términos y Condiciones</h2>
+  <p class="legal-updated">Última actualización: 24 de mayo de 2026</p>
+  <div class="legal-box">
+    <h3>1. Aceptación de los términos</h3>
+    <p>Al descargar, registrarse o utilizar la aplicación móvil Senda ("la App"), usted acepta quedar vinculado por estos Términos y Condiciones. Si no está de acuerdo con alguna parte de estos términos, no podrá acceder al servicio.</p>
+
+    <h3>2. Descripción del servicio</h3>
+    <p>Senda es una plataforma tecnológica de intermediación que conecta a usuarios que requieren servicios de transporte privado (taxi y mototaxi) con conductores independientes en la ciudad de Chincha, región Ica, Perú. Senda no es una empresa de transporte; los conductores son trabajadores independientes.</p>
+
+    <h3>3. Registro y cuenta de usuario</h3>
+    <ul>
+      <li>El usuario debe tener como mínimo 18 años para registrarse.</li>
+      <li>La información proporcionada en el registro debe ser veraz, completa y actualizada.</li>
+      <li>El usuario es responsable de mantener la confidencialidad de sus credenciales de acceso.</li>
+      <li>Senda se reserva el derecho de suspender o cancelar cuentas que incumplan estas condiciones.</li>
+    </ul>
+
+    <h3>4. Tarifas y pagos</h3>
+    <ul>
+      <li>Las tarifas se calculan en función de la distancia, el tipo de vehículo y la demanda en tiempo real.</li>
+      <li>El precio estimado se muestra antes de confirmar el viaje. El precio final puede variar por cambios de ruta o tiempo de espera.</li>
+      <li>Los medios de pago aceptados son: efectivo, Yape y Plin.</li>
+      <li>Senda cobra una comisión al conductor sobre cada viaje completado. Dicha comisión no aplica al pasajero.</li>
+    </ul>
+
+    <h3>5. Cancelaciones</h3>
+    <p>Los usuarios pueden cancelar una solicitud de viaje antes de que el conductor llegue al punto de recogida. Cancelaciones reiteradas sin causa justificada podrán resultar en la suspensión temporal de la cuenta.</p>
+
+    <h3>6. Responsabilidades</h3>
+    <ul>
+      <li>Senda no es responsable de los daños, pérdidas o lesiones que pudieran ocurrir durante un viaje, ya que los conductores son prestadores de servicio independientes.</li>
+      <li>Los conductores son responsables de cumplir la normativa de tránsito vigente en el Perú.</li>
+      <li>Senda no garantiza la disponibilidad continua del servicio.</li>
+    </ul>
+
+    <h3>7. Propiedad intelectual</h3>
+    <p>La marca "Senda", el logo, el diseño de la aplicación y todos los contenidos son propiedad de Angel Gonzales Castilla. Queda prohibida su reproducción sin autorización expresa.</p>
+
+    <h3>8. Modificaciones</h3>
+    <p>Senda se reserva el derecho de modificar estos Términos en cualquier momento. Los cambios serán notificados a través de la aplicación. El uso continuado del servicio implica la aceptación de los nuevos términos.</p>
+
+    <h3>9. Ley aplicable y jurisdicción</h3>
+    <p>Estos términos se rigen por las leyes de la República del Perú. Cualquier controversia será sometida a los juzgados competentes de la ciudad de Chincha, Ica, renunciando expresamente a cualquier otro fuero.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ POLÍTICA DE CANCELACIONES Y DEVOLUCIONES ═══════════════ -->
+<section id="cancelaciones">
+  <div class="section-label">Legal</div>
+  <h2 class="section-title">Política de Cancelaciones y Devoluciones</h2>
+  <p class="legal-updated">Última actualización: 24 de mayo de 2026</p>
+  <div class="legal-box">
+    <h3>Cancelación por parte del pasajero</h3>
+    <ul>
+      <li><strong>Antes de asignación de conductor:</strong> Cancelación sin costo ni penalización.</li>
+      <li><strong>Después de asignación, antes de llegada del conductor:</strong> Cancelación permitida sin costo. Se registra en el historial del usuario.</li>
+      <li><strong>Más de 3 cancelaciones en un día:</strong> Se aplica un período de espera de 30 minutos antes de poder solicitar un nuevo viaje.</li>
+    </ul>
+
+    <h3>Cancelación por parte del conductor</h3>
+    <ul>
+      <li>El conductor puede cancelar un viaje aceptado por causas de fuerza mayor.</li>
+      <li>Cancelaciones reiteradas sin justificación pueden derivar en la suspensión de la cuenta del conductor.</li>
+    </ul>
+
+    <h3>Devoluciones</h3>
+    <ul>
+      <li>Dado que el servicio de transporte es de naturaleza inmediata y consumida al momento de la prestación, <strong>no aplican devoluciones monetarias</strong> una vez iniciado y completado el viaje.</li>
+      <li>En caso de cobro incorrecto o error en el monto, el usuario debe comunicarse dentro de las 24 horas siguientes al viaje a través de <a href="mailto:angelgonzales9730@gmail.com">angelgonzales9730@gmail.com</a> o al <a href="tel:+51933567797">+51 933 567 797</a>.</li>
+      <li>Senda evaluará cada caso individualmente y, de comprobarse el error, gestionará el ajuste o compensación correspondiente dentro de un plazo de 5 días hábiles.</li>
+    </ul>
+
+    <h3>Viajes programados</h3>
+    <ul>
+      <li>Los viajes programados pueden cancelarse sin costo hasta 1 hora antes de la hora pactada.</li>
+      <li>Cancelaciones con menos de 1 hora de anticipación quedarán registradas en el historial del usuario.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════ LIBRO DE RECLAMACIONES ═══════════════ -->
+<section id="libro-reclamaciones">
+  <div class="center" style="margin-bottom: 36px;">
+    <div class="section-label">INDECOPI</div>
+    <h2 class="section-title">Libro de Reclamaciones</h2>
+    <p class="section-sub">Conforme al Art. 150 del Código de Protección y Defensa del Consumidor (Ley N.° 29571).</p>
+  </div>
+  <div class="libro-box">
+    <div class="libro-header">
+      <h2>LIBRO DE RECLAMACIONES</h2>
+      <p>Senda · Chincha Alta, Ica, Perú · angelgonzales9730@gmail.com · +51 933 567 797</p>
+    </div>
+    <div class="libro-form-wrap">
+
+      <!-- Código automático -->
+      <div class="codigo-box">
+        <div>
+          <div class="codigo-label">Código de reclamo</div>
+          <div class="codigo-val" id="codigoReclamo">Generando...</div>
+        </div>
+        <div style="margin-left: auto; font-size: 12px; color: var(--gray);">
+          Fecha: <strong id="fechaReclamo"></strong>
+        </div>
+      </div>
+
+      <div id="formSuccess" class="form-success">
+        <h3>Reclamo registrado correctamente</h3>
+        <p>Tu código de reclamo es <strong id="codigoConfirmacion"></strong>. Recibirás una respuesta en tu correo electrónico en un plazo máximo de 30 días calendario, conforme a la normativa INDECOPI.</p>
+      </div>
+
+      <form id="libroForm" action="https://formspree.io/f/mnjrbpzk" method="POST">
+        <input type="hidden" name="codigo_reclamo" id="inputCodigo" />
+        <input type="hidden" name="fecha" id="inputFecha" />
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombres y apellidos <span>*</span></label>
+            <input type="text" name="nombres" placeholder="Ej: Juan Pérez García" required />
+          </div>
+          <div class="form-group">
+            <label>DNI / CE <span>*</span></label>
+            <input type="text" name="dni" placeholder="12345678" maxlength="12" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Teléfono <span>*</span></label>
+            <input type="tel" name="telefono" placeholder="+51 999 999 999" required />
+          </div>
+          <div class="form-group">
+            <label>Correo electrónico <span>*</span></label>
+            <input type="email" name="email" placeholder="tu@correo.com" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Dirección del consumidor <span>*</span></label>
+          <input type="text" name="direccion" placeholder="Calle, distrito, ciudad" required />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Tipo de solicitud <span>*</span></label>
+            <select name="tipo" required>
+              <option value="">Seleccionar...</option>
+              <option value="Reclamo">Reclamo (disconformidad con el servicio)</option>
+              <option value="Queja">Queja (mala atención o trato)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Servicio contratado <span>*</span></label>
+            <select name="servicio" required>
+              <option value="">Seleccionar...</option>
+              <option value="Taxi en Chincha">Taxi en Chincha</option>
+              <option value="Mototaxi en Chincha">Mototaxi en Chincha</option>
+              <option value="Viaje Programado">Viaje Programado</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Monto del servicio contratado (S/)</label>
+          <input type="number" name="monto" placeholder="0.00" min="0" step="0.01" />
+        </div>
+
+        <div class="form-group">
+          <label>Descripción del reclamo o queja <span>*</span></label>
+          <textarea name="descripcion" placeholder="Describe detalladamente lo ocurrido..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Pedido o solución que solicita <span>*</span></label>
+          <textarea name="pedido" placeholder="Indica qué solución o compensación solicitas..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-enviar" id="btnEnviar">Registrar Reclamo</button>
+        <p class="form-nota">
+          Al enviar este formulario, acepta que Senda procesará sus datos de acuerdo a nuestra
+          <a href="#terminos">Política de Privacidad</a>. Recibirá respuesta en un máximo de
+          <strong>30 días calendario</strong> conforme a Ley N.° 29571.
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <img src="logo.png" alt="Senda" style="width:36px; height:36px; border-radius:9px; margin-bottom:12px; display:block; margin-left:auto; margin-right:auto;" />
+  <strong>Senda</strong> — Transporte en Chincha, Ica, Perú<br/>
+  Angel Gonzales Castilla · <a href="mailto:angelgonzales9730@gmail.com">angelgonzales9730@gmail.com</a> · <a href="tel:+51933567797">+51 933 567 797</a><br/><br/>
+  <a href="#terminos">Términos y Condiciones</a> &nbsp;·&nbsp;
+  <a href="#cancelaciones">Política de Cancelaciones</a> &nbsp;·&nbsp;
+  <a href="https://angelgonzales9730.github.io/senda.github.io/90a3bfe3-d128-4f1f-86bc-dfadba9a98fc_en.html">Política de Privacidad</a> &nbsp;·&nbsp;
+  <a href="#libro-reclamaciones">Libro de Reclamaciones</a><br/><br/>
+  <span style="font-size:11px;">&copy; 2026 Senda. Todos los derechos reservados.</span>
+</footer>
+
+<script>
+  // ── Generar código y fecha de reclamo
+  function generarCodigo() {
+    const ahora = new Date();
+    const yyyy  = ahora.getFullYear();
+    const mm    = String(ahora.getMonth() + 1).padStart(2, '0');
+    const dd    = String(ahora.getDate()).padStart(2, '0');
+    const rand  = Math.floor(Math.random() * 90000) + 10000;
+    return `SENDA-${yyyy}${mm}${dd}-${rand}`;
+  }
+
+  const codigo = generarCodigo();
+  const fecha  = new Date().toLocaleDateString('es-PE', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  document.getElementById('codigoReclamo').textContent    = codigo;
+  document.getElementById('fechaReclamo').textContent     = fecha;
+  document.getElementById('inputCodigo').value            = codigo;
+  document.getElementById('inputFecha').value             = fecha;
+
+  // ── Manejo del formulario con Formspree
+  const form    = document.getElementById('libroForm');
+  const success = document.getElementById('formSuccess');
+  const btn     = document.getElementById('btnEnviar');
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    btn.disabled    = true;
+    btn.textContent = 'Enviando...';
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (res.ok) {
+        form.style.display = 'none';
+        success.style.display = 'block';
+        document.getElementById('codigoConfirmacion').textContent = codigo;
+      } else {
+        btn.disabled    = false;
+        btn.textContent = 'Registrar Reclamo';
+        alert('Hubo un error al enviar. Por favor intenta de nuevo o contáctanos directamente.');
+      }
+    } catch {
+      btn.disabled    = false;
+      btn.textContent = 'Registrar Reclamo';
+      alert('Error de conexión. Por favor intenta de nuevo.');
+    }
+  });
+</script>
+
+</body>
+</html>
